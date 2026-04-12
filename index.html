@@ -49,7 +49,7 @@
       transform: scale(1.02);
     }
 
-    #fire-particles-canvas {
+    #atmospheric-canvas {
       position: fixed;
       top: 0;
       left: 0;
@@ -57,7 +57,7 @@
       height: 100%;
       pointer-events: none;
       z-index: -1;
-      opacity: 0.7;
+      opacity: 0.85; /* شفافية عامة */
     }
 
     /* ========= NAVIGATION ========= */
@@ -419,6 +419,15 @@
       margin-top: 28px;
     }
 
+    /* شعار ميرسك في الهيرو */
+    .maersk-hero-logo {
+      width: 180px;
+      max-width: 50%;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 0 20px #42B0D9) drop-shadow(0 0 8px #ffd96600);
+      transition: filter 0.3s;
+    }
+
     .footer-note {
       margin-top: 20px;
       text-align: center;
@@ -483,6 +492,9 @@
       .presenter-name-ar {
         font-size: 1.1rem;
       }
+      .maersk-hero-logo {
+        width: 150px;
+      }
     }
 
     @media (max-width: 550px) {
@@ -533,6 +545,9 @@
       .nav-right, .nav-left {
         gap: 6px;
       }
+      .maersk-hero-logo {
+        width: 130px;
+      }
     }
 
     @media (max-width: 380px) {
@@ -564,7 +579,7 @@
 <body>
 
 <div id="dynamic-bg"></div>
-<canvas id="fire-particles-canvas"></canvas>
+<canvas id="atmospheric-canvas"></canvas>
 
 <!-- navigation bar -->
 <div class="nav-glass">
@@ -585,9 +600,10 @@
 </div>
 
 <div class="presentation-container">
-  <!-- Hero section مع تصغير العنوان وإحصائيات جنب بعض -->
+  <!-- Hero section مع شعار ميرسك متوهج -->
   <div class="hero-section fullscreen-section" data-bg="./ASSETS/16.png">
     <div class="hero-content">
+      <img src="./ASSETS/ميريسك2.png" alt="Maersk Logo" class="maersk-hero-logo">
       <h1>ميرسك في عين العاصفة: كيف تهدد حرب إيران ومضيق هرمز عملاق الشحن العالمي؟</h1>
       <p>عندما تغلق أهم الممرات المائية، لا يتوقف النفط فقط؛ بل تتعطل سلاسل التوريد العالمية. ميرسك الدنماركية تواجه أزمة جيوسياسية غير مسبوقة تهدد أعمالها وتربك التجارة العالمية.</p>
       <div class="badges-row">
@@ -685,36 +701,26 @@
     </div>
   </div>
 
-  <!-- References section (المراجع الجديدة كاملة مع روابط قابلة للنقر) -->
+  <!-- References section -->
   <div class="references-section fullscreen-section" data-bg="./ASSETS/1.PNG">
     <div class="ref-card">
-      <div class="ref-title"><i class="fas fa-book-open"></i> المراجع والمصادر </div>
+      <div class="ref-title"><i class="fas fa-book-open"></i> المراجع والمصادر (اضغط على المرجع للانتقال للمصدر)</div>
       <div class="ref-grid">
-        <!-- 1 -->
         <div class="ref-item"><a href="https://www.maersk.com.cn/zh-cn/news/articles/2026/03/12/middle-east-operational-update-9" target="_blank"><i class="fas fa-ship"></i> ميرسك - التحديث التشغيلي للشرق الأوسط رقم 9 (تعليق الحجوزات)</a></div>
-        <!-- 2 -->
         <div class="ref-item"><a href="https://www.cna.com.tw/news/aopl/202603280203.aspx" target="_blank"><i class="fas fa-broadcast-tower"></i> وكالة CNA - الهجوم بطائرة مسيرة على ميناء صلالة (28 مارس 2026)</a></div>
-        <!-- 3 -->
         <div class="ref-item"><a href="https://www.maersk.com.cn/ja-jp/news/articles/2026/04/01/middle-east-situation-overview-2" target="_blank"><i class="fas fa-eye"></i> ميرسك - نظرة عامة على الوضع في الشرق الأوسط 2 (حادثة صلالة)</a></div>
-        <!-- 4 -->
         <div class="ref-item"><a href="https://www.worldports.org/maersk-operations-updates-on-situation-in-the-middle-eastrerouting-of-me11-and-mecl-service-around-the-cape-of-good-hopesailing-through-the-strait-of-hormuz/" target="_blank"><i class="fas fa-route"></i> ميرسك - تحويل مسار خدمات ME11 و MECL حول رأس الرجاء الصالح</a></div>
-        <!-- 5 -->
         <div class="ref-item"><a href="https://au.finance.yahoo.com/news/hormuz-becomes-worlds-most-expensive-111949822.html" target="_blank"><i class="fas fa-chart-line"></i> ياهو فاينانس - قفزة أقساط التأمين في مضيق هرمز 200-300%</a></div>
-        <!-- 6 -->
         <div class="ref-item"><a href="https://www.asiae.co.kr/en/article/2026032912130478015" target="_blank"><i class="fas fa-shield-halved"></i> آسيا بيزنس - ارتفاع أقساط التأمين البحري لأكثر من 1000%</a></div>
-        <!-- 7 -->
         <div class="ref-item"><a href="https://gubaf10.eastmoney.com/news,cjpl,1675909870.html" target="_blank"><i class="fas fa-oil-can"></i> إيست موني - باركليز: خام برنت قد يصل إلى 120 دولاراً</a></div>
-        <!-- 8 -->
         <div class="ref-item"><a href="https://www.mitrade.com/cn/insights/news/live-news/article-3-1560160-20260318" target="_blank"><i class="fas fa-dollar-sign"></i> ميترايد - سيتي يرفع توقعات برنت إلى 110-120 دولاراً</a></div>
-        <!-- 9 -->
         <div class="ref-item"><a href="https://www.worldports.org/maersk-using-land-bridge-routes-for-gulf-supplies-as-hormuz-blockade-drags-on/" target="_blank"><i class="fas fa-truck"></i> وورلد بورترز - ميرسك تستخدم الجسور البرية لتجنب هرمز</a></div>
-        <!-- 10 -->
         <div class="ref-item"><a href="https://www.worldports.org/maersk-expands-green-methanol-partnerships/" target="_blank"><i class="fas fa-leaf"></i> وورلد بورترز - شراكات ميرسك لتوسيع الميثانول الأخضر</a></div>
       </div>
     </div>
   </div>
 
-  <!-- Team section (نفس الفريق) -->
+  <!-- Team section -->
   <div class="presenters-section fullscreen-section" data-bg="./ASSETS/5.png">
     <div class="presenters-card">
       <div class="presenters-title"><i class="fas fa-users"></i> فريق البحث والعرض الأكاديمي</div>
@@ -742,114 +748,205 @@
 </div>
 
 <script>
-  // dynamic background switching
-  const sectionsList = document.querySelectorAll('.fullscreen-section');
-  const dynamicBgDiv = document.getElementById('dynamic-bg');
-  const fallbackBg = "./ASSETS/16.png";
-  dynamicBgDiv.style.backgroundImage = `url(${fallbackBg})`;
-  
-  const bgMap = new Map();
-  sectionsList.forEach(section => {
-    let bgVal = section.getAttribute('data-bg') || fallbackBg;
-    bgMap.set(section, bgVal);
-  });
-  
-  const intersectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const targetBg = bgMap.get(entry.target);
-        if (targetBg) dynamicBgDiv.style.backgroundImage = `url(${targetBg})`;
+  (function() {
+    "use strict";
+
+    // ========== 1. خلفية ديناميكية ==========
+    const sectionsList = document.querySelectorAll('.fullscreen-section');
+    const dynamicBgDiv = document.getElementById('dynamic-bg');
+    const fallbackBg = "./ASSETS/16.png";
+    
+    if (dynamicBgDiv) {
+      dynamicBgDiv.style.backgroundImage = `url(${fallbackBg})`;
+      
+      const bgMap = new Map();
+      sectionsList.forEach(section => {
+        let bgVal = section.getAttribute('data-bg') || fallbackBg;
+        bgMap.set(section, bgVal);
+      });
+      
+      const intersectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const targetBg = bgMap.get(entry.target);
+            if (targetBg) dynamicBgDiv.style.backgroundImage = `url(${targetBg})`;
+          }
+        });
+      }, { threshold: 0.4 });
+      
+      sectionsList.forEach(sec => intersectionObserver.observe(sec));
+    }
+
+    // ========== 2. جسيمات المطر والضباب والدخان الشفاف ==========
+    const canvas = document.getElementById('atmospheric-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let particles = [];
+    
+    const PARTICLE_COUNT = 140; // عدد كافي لتأثير ناعم
+
+    class AtmosphericParticle {
+      constructor() {
+        this.reset(true);
+      }
+      
+      reset(randomizeY = true) {
+        // أنواع: 'rain' (قطرات مطر شفافة) , 'mist' (ضباب) , 'smoke' (دخان خفيف)
+        const typeRand = Math.random();
+        if (typeRand < 0.45) this.type = 'rain';
+        else if (typeRand < 0.8) this.type = 'mist';
+        else this.type = 'smoke';
+        
+        this.x = Math.random() * width;
+        this.y = randomizeY ? Math.random() * height : -20;
+        
+        // حجم صغير نسبياً
+        if (this.type === 'rain') {
+          this.size = Math.random() * 2.5 + 0.8;
+          this.speedY = Math.random() * 1.8 + 1.2;
+          this.speedX = (Math.random() - 0.5) * 0.15;
+          this.opacity = Math.random() * 0.25 + 0.08;
+          this.color = `rgba(180, 215, 240, ${this.opacity})`;
+        } else if (this.type === 'mist') {
+          this.size = Math.random() * 40 + 25;
+          this.speedY = Math.random() * 0.35 + 0.1;
+          this.speedX = (Math.random() - 0.5) * 0.25;
+          this.opacity = Math.random() * 0.12 + 0.03;
+          this.color = `rgba(190, 215, 230, ${this.opacity})`;
+        } else { // smoke
+          this.size = Math.random() * 55 + 35;
+          this.speedY = Math.random() * 0.25 + 0.05;
+          this.speedX = (Math.random() - 0.5) * 0.2;
+          this.opacity = Math.random() * 0.1 + 0.02;
+          this.color = `rgba(200, 210, 215, ${this.opacity})`;
+        }
+      }
+      
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        
+        // إعادة تدوير الجسيمات التي تخرج من الشاشة
+        if (this.y > height + 50 || this.x < -100 || this.x > width + 100) {
+          this.reset(false);
+          this.y = -30;
+          this.x = Math.random() * width;
+        }
+      }
+      
+      draw() {
+        ctx.beginPath();
+        if (this.type === 'rain') {
+          // رسم قطرات مطر كخطوط صغيرة مائلة لأسفل
+          ctx.strokeStyle = this.color;
+          ctx.lineWidth = this.size * 0.5;
+          ctx.moveTo(this.x, this.y);
+          ctx.lineTo(this.x - this.speedX * 8, this.y + this.size * 2.5);
+          ctx.stroke();
+        } else {
+          // ضباب ودخان: دوائر ضبابية
+          const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+          gradient.addColorStop(0, this.color);
+          gradient.addColorStop(0.8, `rgba(170, 190, 210, ${this.opacity * 0.4})`);
+          ctx.fillStyle = gradient;
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push(new AtmosphericParticle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, width, height);
+      
+      // تأثير إضافي: طبقة خفيفة جداً من الضباب العام لإضفاء جو "عاصفة" ناعم
+      ctx.fillStyle = 'rgba(10, 20, 30, 0.03)';
+      ctx.fillRect(0, 0, width, height);
+      
+      for (let p of particles) {
+        p.update();
+        p.draw();
+      }
+      
+      requestAnimationFrame(animateParticles);
+    }
+
+    function handleResize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      initParticles();
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    animateParticles();
+
+    // إضافة قطرات إضافية عند تحريك الماوس (بشكل خفيف جداً)
+    document.addEventListener('mousemove', (e) => {
+      // إضافة عدد قليل من القطرات حول المؤشر لتعزيز الإحساس بالعاصفة
+      for (let i = 0; i < 2; i++) {
+        if (particles.length > PARTICLE_COUNT + 30) break;
+        const p = new AtmosphericParticle();
+        p.x = e.clientX + (Math.random() - 0.5) * 70;
+        p.y = e.clientY + (Math.random() - 0.5) * 40;
+        p.type = 'rain';
+        p.size = Math.random() * 2 + 0.8;
+        p.speedY = Math.random() * 2 + 1;
+        p.speedX = (Math.random() - 0.5) * 0.3;
+        p.opacity = 0.18;
+        p.color = `rgba(170, 210, 240, ${p.opacity})`;
+        particles.push(p);
+      }
+      
+      // حذف الجسيمات الزائدة إذا تجاوزت الحد للحفاظ على الأداء
+      if (particles.length > PARTICLE_COUNT + 50) {
+        particles = particles.slice(-PARTICLE_COUNT - 20);
       }
     });
-  }, { threshold: 0.4 });
-  sectionsList.forEach(sec => intersectionObserver.observe(sec));
 
-  // Particle system (نار وجزيئات)
-  const canvas = document.getElementById('fire-particles-canvas');
-  const ctxCanvas = canvas.getContext('2d');
-  let w = window.innerWidth, h = window.innerHeight;
-  let particlesArray = [];
-  const PARTICLE_NUM = 120;
-  
-  class ParticleFluid {
-    constructor(x, y) {
-      this.x = x !== undefined ? x : Math.random() * w;
-      this.y = y !== undefined ? y : Math.random() * h * 0.75 + h * 0.2;
-      this.size = Math.random() * 8 + 2.5;
-      this.vx = (Math.random() - 0.5) * 0.7;
-      this.vy = Math.random() * -1.2 - 0.4;
-      this.life = 1;
-      this.decayRate = 0.0035 + Math.random() * 0.009;
-      const rnd = Math.random();
-      if (rnd < 0.55) this.type = 'ember';
-      else if (rnd < 0.8) this.type = 'smoke';
-      else this.type = 'oilDroplet';
-      this.updateColor();
+    // وميض برق خفيف جداً (اختياري) - يضيف لمسة "عاصفة" دون إزعاج
+    let lightningTimeout;
+    function triggerLightning() {
+      if (!canvas) return;
+      // ومضة بيضاء شفافة سريعة
+      const overlay = document.createElement('div');
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100%';
+      overlay.style.height = '100%';
+      overlay.style.backgroundColor = 'rgba(255, 255, 255, 0.06)';
+      overlay.style.pointerEvents = 'none';
+      overlay.style.zIndex = '10';
+      overlay.style.transition = 'opacity 0.2s';
+      document.body.appendChild(overlay);
+      
+      setTimeout(() => {
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.remove(), 300);
+      }, 50);
+      
+      // جدولة الوميض التالي بشكل عشوائي
+      lightningTimeout = setTimeout(triggerLightning, Math.random() * 15000 + 10000);
     }
-    updateColor() {
-      if (this.type === 'ember') this.color = `rgba(220, 70, 30, ${this.life * 0.75})`;
-      else if (this.type === 'smoke') this.color = `rgba(45, 45, 55, ${this.life * 0.45})`;
-      else this.color = `rgba(15, 20, 28, ${this.life * 0.85})`;
-    }
-    update() {
-      this.x += this.vx;
-      this.y += this.vy;
-      this.life -= this.decayRate;
-      if (this.type === 'smoke') this.size += 0.12;
-      if (this.type === 'oilDroplet') this.size += 0.04;
-      this.updateColor();
-      return this.life > 0.02;
-    }
-    draw() {
-      ctxCanvas.beginPath();
-      ctxCanvas.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctxCanvas.fillStyle = this.color;
-      ctxCanvas.fill();
-      if (this.type === 'ember') {
-        ctxCanvas.shadowBlur = 8;
-        ctxCanvas.shadowColor = '#ff6a2e';
-        ctxCanvas.fill();
-        ctxCanvas.shadowBlur = 0;
-      }
-    }
-  }
-  
-  function initParticlesFluid() {
-    particlesArray = [];
-    for (let i = 0; i < PARTICLE_NUM; i++) particlesArray.push(new ParticleFluid());
-  }
-  
-  function animateFluid() {
-    ctxCanvas.clearRect(0, 0, w, h);
-    for (let i = particlesArray.length-1; i >= 0; i--) {
-      if (!particlesArray[i].update()) particlesArray[i] = new ParticleFluid();
-      else particlesArray[i].draw();
-    }
-    requestAnimationFrame(animateFluid);
-  }
-  
-  function resizeCanvasHandler() {
-    w = window.innerWidth;
-    h = window.innerHeight;
-    canvas.width = w;
-    canvas.height = h;
-    initParticlesFluid();
-  }
-  window.addEventListener('resize', resizeCanvasHandler);
-  resizeCanvasHandler();
-  animateFluid();
-  
-  document.addEventListener('mousemove', (e) => {
-    for(let i=0; i<2; i++) {
-      let p = new ParticleFluid(e.clientX + (Math.random() - 0.5)*35, e.clientY + (Math.random() - 0.5)*30);
-      p.vx = (Math.random() - 0.5)*1.3;
-      p.vy = (Math.random() - 0.8)*1.1;
-      p.size = Math.random()*7+2;
-      p.life = 0.68;
-      particlesArray.push(p);
-    }
-    if(particlesArray.length > 340) particlesArray.splice(0, 35);
-  });
+    // بدء الوميض بعد 5 ثواني
+    setTimeout(() => triggerLightning(), 5000);
+    
+    // تنظيف عند إلغاء التحميل (اختياري)
+    window.addEventListener('beforeunload', () => {
+      if (lightningTimeout) clearTimeout(lightningTimeout);
+    });
+
+  })();
 </script>
 </body>
 </html>
