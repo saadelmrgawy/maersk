@@ -19,7 +19,7 @@
       --maersk-star: #42B0D9;
       --crisis-red: #C8102E;
       --gold: #FFD966;
-      --glass-bg: rgba(8, 28, 48, 0.5);   /* زيادة الشفافية */
+      --glass-bg: rgba(8, 28, 48, 0.5);
       --glass-border: rgba(66, 176, 217, 0.4);
       --shadow-xl: 0 25px 45px rgba(0, 0, 0, 0.5);
       --text-light: #f2f7ff;
@@ -27,7 +27,7 @@
 
     body {
       font-family: 'Cairo', sans-serif;
-      background: #010a138e;
+      background: #010a13;
       color: var(--text-light);
       overflow-x: hidden;
       position: relative;
@@ -35,20 +35,40 @@
       scroll-behavior: smooth;
     }
 
-    #dynamic-bg {
+    /* ----- طبقات الخلفية المتقاطعة (Crossfade Layers) ----- */
+    .bg-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -2;
+      z-index: -3;
+      overflow: hidden;
+    }
+    .bg-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background-size: cover;
       background-position: center 35%;
-      transition: background-image 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      background-repeat: no-repeat;
+      transition: opacity 0.9s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      opacity: 0;
       filter: brightness(0.36) contrast(1.15) blur(1px);
       transform: scale(1.02);
     }
+    .bg-layer.active {
+      opacity: 1;
+      z-index: 1;
+    }
+    .bg-layer.inactive {
+      opacity: 0;
+      z-index: 0;
+    }
 
+    /* Canvas atmospheric effect (فوق الخلفية) */
     #atmospheric-canvas {
       position: fixed;
       top: 0;
@@ -56,11 +76,11 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: -1;
-      opacity: 0.85; /* شفافية عامة */
+      z-index: -2;
+      opacity: 0.85;
     }
 
-    /* ========= NAVIGATION ========= */
+    /* ========= NAVIGATION - متجاوبة بدون التفاف ========= */
     .nav-glass {
       position: fixed;
       top: 0;
@@ -70,30 +90,37 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 5%;
-      flex-wrap: wrap;
+      padding: 10px 5%;
       gap: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.003);
+      background: rgba(5, 15, 25, 0);
+      flex-wrap: nowrap;      /* منع الالتفاف على جميع الشاشات */
+      overflow-x: auto;
+      overflow-y: hidden;
+      white-space: nowrap;
+      scrollbar-width: none;  /* إخفاء سكرول بار في فايرفوكس */
     }
-
+    .nav-glass::-webkit-scrollbar {
+      display: none;
+    }
     .nav-right, .nav-left {
       display: flex;
       align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+      gap: 8px;
+      flex-shrink: 0;
     }
-
     .nav-logo, .flag-icon {
-      height: 70px;
+      height: 55px;
       width: auto;
       filter: drop-shadow(0 0 6px rgba(0,0,0,0.5));
       transition: all 0.2s ease;
+      flex-shrink: 0;
     }
-
     .nav-divider {
       width: 1px;
-      height: 35px;
+      height: 30px;
       background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      flex-shrink: 0;
     }
 
     /* container & sections */
@@ -117,7 +144,6 @@
       position: relative;
     }
 
-    /* hero gets extra top padding to clear navbar */
     .hero-section {
       scroll-snap-align: start;
       min-height: 100vh;
@@ -133,7 +159,6 @@
       padding-bottom: 60px;
     }
 
-    /* تقليل المسافات بين الأقسام على الموبايل */
     @media (max-width: 760px) {
       .hero-section {
         padding-top: 110px;
@@ -146,6 +171,20 @@
       .presentation-container {
         padding: 0 16px;
       }
+      /* تصغير اللوجوهات في الناف بار */
+      .nav-logo, .flag-icon {
+        height: 42px;
+      }
+      .nav-divider {
+        height: 24px;
+      }
+      .nav-right, .nav-left {
+        gap: 6px;
+      }
+      .nav-glass {
+        padding: 8px 4%;
+        gap: 8px;
+      }
     }
 
     @media (max-width: 550px) {
@@ -157,12 +196,36 @@
         padding-top: 60px;
         padding-bottom: 40px;
       }
+      .nav-logo, .flag-icon {
+        height: 36px;
+      }
+      .nav-divider {
+        height: 20px;
+      }
+      .nav-right, .nav-left {
+        gap: 4px;
+      }
+      .nav-glass {
+        padding: 6px 3%;
+      }
     }
 
-    /* كروت شفافة أكثر */
+    @media (max-width: 420px) {
+      .nav-logo, .flag-icon {
+        height: 32px;
+      }
+      .nav-divider {
+        height: 18px;
+      }
+      .nav-glass {
+        gap: 5px;
+      }
+    }
+
+    /* كروت شفافة */
     .slide-card, .ref-card, .presenters-card, .hero-content {
       background: var(--glass-bg);
-      backdrop-filter: blur(1px);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--glass-border);
       border-radius: 42px;
       padding: 28px 40px;
@@ -260,7 +323,6 @@
       text-align: center;
     }
 
-    /* references & presenters */
     .references-section, .presenters-section {
       scroll-snap-align: start;
       min-height: auto;
@@ -272,7 +334,7 @@
 
     .ref-card, .presenters-card {
       background: var(--glass-bg);
-      backdrop-filter: blur(1px);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--glass-border);
       border-radius: 42px;
       padding: 38px 32px;
@@ -419,13 +481,11 @@
       margin-top: 28px;
     }
 
-    /* شعار ميرسك في الهيرو */
     .maersk-hero-logo {
       width: 180px;
       max-width: 50%;
       margin-bottom: 10px;
-      filter: drop-shadow(0 0 20px #42B0D9) drop-shadow(0 0 8px #ffd96600);
-      transition: filter 0.3s;
+      filter: drop-shadow(0 0 20px #42b1d96c);
     }
 
     .footer-note {
@@ -434,7 +494,6 @@
       font-size: clamp(0.7rem, 3vw, 0.85rem);
     }
 
-    /* table responsiveness */
     .responsive-table {
       overflow-x: auto;
       margin: 20px 0;
@@ -457,7 +516,6 @@
       font-weight: 700;
     }
 
-    /* responsive cards & images */
     @media (max-width: 800px) {
       .slide-card, .slide-card.reverse {
         flex-direction: column;
@@ -471,12 +529,6 @@
       }
       .slide-text {
         width: 100%;
-      }
-      .nav-logo, .flag-icon {
-        height: 50px;
-      }
-      .nav-divider {
-        height: 26px;
       }
       .ref-card, .presenters-card {
         padding: 28px 22px;
@@ -509,9 +561,6 @@
       .section-title {
         margin-bottom: 12px;
       }
-      .section-text p {
-        margin-bottom: 10px;
-      }
       .hero-content {
         padding: 22px 16px;
       }
@@ -536,34 +585,6 @@
       .badges-row {
         gap: 8px;
       }
-      .ref-item {
-        padding: 14px 14px;
-      }
-      .nav-glass {
-        padding: 8px 4%;
-      }
-      .nav-right, .nav-left {
-        gap: 6px;
-      }
-      .maersk-hero-logo {
-        width: 130px;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .nav-logo, .flag-icon {
-        height: 42px;
-      }
-      .hero-section {
-        padding-top: 130px;
-      }
-      .fullscreen-section:not(.hero-section) {
-        padding-top: 70px;
-      }
-      .stat-badge {
-        white-space: normal;
-        text-align: center;
-      }
     }
 
     html {
@@ -578,10 +599,14 @@
 </head>
 <body>
 
-<div id="dynamic-bg"></div>
+<!-- نظام الخلفية المزدوج مع تأثير الكروس فيد -->
+<div class="bg-container">
+  <div class="bg-layer active" id="bg-layer-0"></div>
+  <div class="bg-layer inactive" id="bg-layer-1"></div>
+</div>
 <canvas id="atmospheric-canvas"></canvas>
 
-<!-- navigation bar -->
+<!-- navigation bar - بدون التفاف حتى على الموبايل -->
 <div class="nav-glass">
   <div class="nav-right">
     <img src="./ASSETS/mtis.png" alt="MTIS logo" class="nav-logo">
@@ -600,7 +625,7 @@
 </div>
 
 <div class="presentation-container">
-  <!-- Hero section مع شعار ميرسك متوهج -->
+  <!-- Hero section -->
   <div class="hero-section fullscreen-section" data-bg="./ASSETS/16.png">
     <div class="hero-content">
       <img src="./ASSETS/ميريسك2.png" alt="Maersk Logo" class="maersk-hero-logo">
@@ -613,78 +638,55 @@
     </div>
   </div>
 
-  <!-- 1: الشلل اللوجستي -->
+  <!-- بقية الأقسام -->
   <div class="fullscreen-section" data-bg="./ASSETS/2.png">
     <div class="slide-card">
       <div class="slide-text">
         <div class="section-title"><i class="fas fa-ship"></i> الشلل اللوجستي: إغلاق الممرات يُجبر ميرسك على تحويل المسارات</div>
-        <div class="section-text">
-          <p>منذ فبراير 2026، أدت الهجمات إلى إغلاق مضيق هرمز أمام الملاحة التجارية. ردت ميرسك فورًا: تعليق جميع عمليات العبور، وإعادة توجيه السفن حول رأس الرجاء الصالح. أعلنت الشركة أن 10 سفن حاويات عالقة في "الخليج العلوي" وعشرات السفن حوّلت مسارها إلى موانئ بديلة. كما تم تعليق خدمتي FM1 وME11. ولمواجهة الأزمة، وسعت ميرسك حلول "الجسور البرية" وعززت الشحن الجوي-البحري.</p>
-        </div>
+        <div class="section-text"><p>منذ فبراير 2026، أدت الهجمات إلى إغلاق مضيق هرمز أمام الملاحة التجارية. ردت ميرسك فورًا: تعليق جميع عمليات العبور، وإعادة توجيه السفن حول رأس الرجاء الصالح. أعلنت الشركة أن 10 سفن حاويات عالقة في "الخليج العلوي" وعشرات السفن حوّلت مسارها إلى موانئ بديلة. كما تم تعليق خدمتي FM1 وME11. ولمواجهة الأزمة، وسعت ميرسك حلول "الجسور البرية" وعززت الشحن الجوي-البحري.</p></div>
       </div>
-      <div class="slide-image">
-        <img src="./ASSETS/12.png" alt="cargo ship crisis">
-      </div>
+      <div class="slide-image"><img src="./ASSETS/12.png" alt="cargo ship crisis"></div>
     </div>
   </div>
 
-  <!-- 2: التكاليف التشغيلية -->
   <div class="fullscreen-section" data-bg="./ASSETS/15.png">
     <div class="slide-card reverse">
-      <div class="slide-image">
-        <img src="./ASSETS/17.png" alt="shipping costs">
-      </div>
+      <div class="slide-image"><img src="./ASSETS/17.png" alt="shipping costs"></div>
       <div class="slide-text">
         <div class="section-title"><i class="fas fa-dollar-sign"></i> ضربة قاسية للجيب: التكاليف التشغيلية تنفجر</div>
-        <div class="section-text">
-          <p>ارتفعت أقساط التأمين ضد مخاطر الحرب بنسبة 200-300% (0.5-1% من قيمة السفينة). فرضت ميرسك رسومًا إضافية طارئة، ورسوم وقود عالمية، و"رسوم شحن إضافية طارئة لمضيق هرمز" بقيمة 1,800-3,000 دولار للحاوية. رغم التحديات، رفعت باركليز توقعات أرباح ميرسك (EBITDA) إلى 8.5 مليار دولار لعام 2026.</p>
-        </div>
+        <div class="section-text"><p>ارتفعت أقساط التأمين ضد مخاطر الحرب بنسبة 200-300% (0.5-1% من قيمة السفينة). فرضت ميرسك رسومًا إضافية طارئة، ورسوم وقود عالمية، و"رسوم شحن إضافية طارئة لمضيق هرمز" بقيمة 1,800-3,000 دولار للحاوية. رغم التحديات، رفعت باركليز توقعات أرباح ميرسك (EBITDA) إلى 8.5 مليار دولار لعام 2026.</p></div>
       </div>
     </div>
   </div>
 
-  <!-- 3: هجمات مباشرة -->
   <div class="fullscreen-section" data-bg="./ASSETS/18.png">
     <div class="slide-card">
       <div class="slide-text">
         <div class="section-title"><i class="fas fa-drone"></i> على خط النار: هجمات مباشرة على البنية التحتية</div>
-        <div class="section-text">
-          <p>استُهدف ميناء صلالة (الذي تديره APM Terminals التابعة لميرسك) مرتين: في 11 و28 مارس 2026. هجوم بطائرتين مسيرتين تسبب بإصابة عامل وأضرار برافعة، مما أدى لتعليق العمليات 48 ساعة. نفت إيران الاستهداف المباشر، لكن وسائل إعلام إيرانية قالت إن الحرس الثوري استهدف "سفينة دعم أمريكية" قرب الميناء.</p>
-        </div>
+        <div class="section-text"><p>استُهدف ميناء صلالة (الذي تديره APM Terminals التابعة لميرسك) مرتين: في 11 و28 مارس 2026. هجوم بطائرتين مسيرتين تسبب بإصابة عامل وأضرار برافعة، مما أدى لتعليق العمليات 48 ساعة. نفت إيران الاستهداف المباشر، لكن وسائل إعلام إيرانية قالت إن الحرس الثوري استهدف "سفينة دعم أمريكية" قرب الميناء.</p></div>
       </div>
-      <div class="slide-image">
-        <img src="./ASSETS/14.png" alt="port cranes">
-      </div>
+      <div class="slide-image"><img src="./ASSETS/14.png" alt="port cranes"></div>
     </div>
   </div>
 
-  <!-- 4: شلل الحجوزات -->
   <div class="fullscreen-section" data-bg="./ASSETS/11.png">
     <div class="slide-card reverse">
-      <div class="slide-image">
-        <img src="./ASSETS/7.png" alt="container terminal">
-      </div>
+      <div class="slide-image"><img src="./ASSETS/7.png" alt="container terminal"></div>
       <div class="slide-text">
         <div class="section-title"><i class="fas fa-ban"></i> شلل الحجوزات: وقف كامل للشحنات من وإلى الخليج</div>
-        <div class="section-text">
-          <p>في 4 مارس 2026، علقت ميرسك قبول حجوزات الشحن الجديدة من وإلى الإمارات، عمان، العراق، الكويت، قطر، البحرين والسعودية، شاملاً الصادر والوارد والعابر. استثنت بعض الموانئ مثل جدة وميناء الملك عبد الله، وأبدت استعدادًا لنقل الشحنات الحيوية كالغذاء والدواء.</p>
-        </div>
+        <div class="section-text"><p>في 4 مارس 2026، علقت ميرسك قبول حجوزات الشحن الجديدة من وإلى الإمارات، عمان، العراق، الكويت، قطر، البحرين والسعودية، شاملاً الصادر والوارد والعابر. استثنت بعض الموانئ مثل جدة وميناء الملك عبد الله، وأبدت استعدادًا لنقل الشحنات الحيوية كالغذاء والدواء.</p></div>
       </div>
     </div>
   </div>
 
-  <!-- 5: استراتيجيات التكيف -->
   <div class="fullscreen-section" data-bg="./ASSETS/19.png">
     <div class="slide-card">
       <div class="slide-text">
         <div class="section-title"><i class="fas fa-chess-board"></i> استراتيجيات التكيف: خارطة طريق لتقليل المخاطر</div>
-        <div class="section-text">
-          <p>يمكن لميرسك تبني استراتيجية متعددة المحاور لتقليل الاعتماد على نقاط الاختناق الجيوسياسية:</p>
+        <div class="section-text"><p>يمكن لميرسك تبني استراتيجية متعددة المحاور لتقليل الاعتماد على نقاط الاختناق الجيوسياسية:</p>
           <div class="responsive-table">
             <table>
-              <thead>
-                <tr><th>المحور الاستراتيجي</th><th>الإجراءات التنفيذية المقترحة</th></tr>
-              </thead>
+              <thead><tr><th>المحور الاستراتيجي</th><th>الإجراءات التنفيذية المقترحة</th></tr></thead>
               <tbody>
                 <tr><td>تنويع المسارات اللوجستية</td><td>التوسع في الجسور البرية، الاستثمار في النقل متعدد الوسائط، التفاوض لضمان ممرات آمنة.</td></tr>
                 <tr><td>التحول في مجال الطاقة</td><td>تسريع الاعتماد على الميثانول الأخضر والوقود الحيوي، إعادة توزيع مخزون الوقود.</td></tr>
@@ -695,16 +697,14 @@
           </div>
         </div>
       </div>
-      <div class="slide-image">
-        <img src="./ASSETS/4.png" alt="green shipping">
-      </div>
+      <div class="slide-image"><img src="./ASSETS/4.png" alt="green shipping"></div>
     </div>
   </div>
 
   <!-- References section -->
-  <div class="references-section fullscreen-section" data-bg="./ASSETS/1.png">
+  <div class="references-section fullscreen-section" data-bg="./ASSETS/1.PNG">
     <div class="ref-card">
-      <div class="ref-title"><i class="fas fa-book-open"></i> المراجع والمصادر</div>
+      <div class="ref-title"><i class="fas fa-book-open"></i> المراجع والمصادر (اضغط على المرجع للانتقال للمصدر)</div>
       <div class="ref-grid">
         <div class="ref-item"><a href="https://www.maersk.com.cn/zh-cn/news/articles/2026/03/12/middle-east-operational-update-9" target="_blank"><i class="fas fa-ship"></i> ميرسك - التحديث التشغيلي للشرق الأوسط رقم 9 (تعليق الحجوزات)</a></div>
         <div class="ref-item"><a href="https://www.cna.com.tw/news/aopl/202603280203.aspx" target="_blank"><i class="fas fa-broadcast-tower"></i> وكالة CNA - الهجوم بطائرة مسيرة على ميناء صلالة (28 مارس 2026)</a></div>
@@ -725,24 +725,10 @@
     <div class="presenters-card">
       <div class="presenters-title"><i class="fas fa-users"></i> فريق البحث والعرض الأكاديمي</div>
       <div class="presenters-grid">
-        <div class="presenter-card">
-          <img src="./ASSETS/saad.png" alt="سعد المرجاوي" class="presenter-img">
-          <div class="presenter-name-ar">سعد المرجاوي</div>
-          <div class="presenter-name-en">Saad EL-Marjawi</div>
-          <div class="presenter-title">BIS STU – Web Presentation Designer</div>
-        </div>
-        <div class="presenter-card">
-          <img src="./ASSETS/omer.png" alt="عمر إبراهيم" class="presenter-img">
-          <div class="presenter-name-ar">عمر إبراهيم</div>
-          <div class="presenter-name-en">Omar Ibrahim</div>
-          <div class="presenter-title"> BIS STU –  Content Creator</div>
-        </div>
+        <div class="presenter-card"><img src="./ASSETS/saad.png" alt="سعد المرجاوي" class="presenter-img"><div class="presenter-name-ar">سعد المرجاوي</div><div class="presenter-name-en">Saad EL-Marjawi</div><div class="presenter-title">BIS STU – Web Presentation Designer</div></div>
+        <div class="presenter-card"><img src="./ASSETS/omer.png" alt="عمر إبراهيم" class="presenter-img"><div class="presenter-name-ar">عمر إبراهيم</div><div class="presenter-name-en">Omar Ibrahim</div><div class="presenter-title">BIS STU – Content Creator</div></div>
       </div>
-      <div class="supervisor-note">
-        <i class="fas fa-chalkboard-user"></i> تحت إشراف الأستاذه الدكتوره / سونه محمد حسن – إدارة الأعمال الدولية<br>
-        <span>كلية تكنولوجيا الإدارة ونظم المعلومات – جامعة بورسعيد</span>
-        <div style="margin-top: 14px;"><i class="fas fa-heart" style="color:#FFD966;"></i> شكراً لكم | Thanks <i class="fas fa-heart" style="color:#FFD966;"></i></div>
-      </div>
+      <div class="supervisor-note"><i class="fas fa-chalkboard-user"></i> تحت إشراف الأستاذه الدكتوره / سونه محمد حسن – إدارة الأعمال الدولية<br><span>كلية تكنولوجيا الإدارة ونظم المعلومات – جامعة بورسعيد</span><div style="margin-top: 14px;"><i class="fas fa-heart" style="color:#FFD966;"></i> شكراً لكم | Thanks <i class="fas fa-heart" style="color:#FFD966;"></i></div></div>
     </div>
   </div>
 </div>
@@ -751,201 +737,209 @@
   (function() {
     "use strict";
 
-    // ========== 1. خلفية ديناميكية ==========
-    const sectionsList = document.querySelectorAll('.fullscreen-section');
-    const dynamicBgDiv = document.getElementById('dynamic-bg');
-    const fallbackBg = "./ASSETS/16.png";
+    // ----- 1. نظام الخلفيات المتقاطع (Crossfade بدون لاج) + preload -----
+    const sections = document.querySelectorAll('.fullscreen-section');
+    const bgLayer0 = document.getElementById('bg-layer-0');
+    const bgLayer1 = document.getElementById('bg-layer-1');
+    let activeLayer = bgLayer0;    // الطبقة النشطة حاليًا
+    let inactiveLayer = bgLayer1;
+    let currentActiveIndex = 0;    // 0 أو 1
     
-    if (dynamicBgDiv) {
-      dynamicBgDiv.style.backgroundImage = `url(${fallbackBg})`;
-      
-      const bgMap = new Map();
-      sectionsList.forEach(section => {
-        let bgVal = section.getAttribute('data-bg') || fallbackBg;
-        bgMap.set(section, bgVal);
+    // تجميع جميع مسارات الخلفيات الفريدة
+    const bgUrlsSet = new Set();
+    sections.forEach(section => {
+      let bg = section.getAttribute('data-bg');
+      if (bg) bgUrlsSet.add(bg);
+    });
+    const allBgUrls = Array.from(bgUrlsSet);
+    
+    // Preload images مسبقاً لضمان عدم وجود تأخير عند التبديل
+    function preloadImages(urls) {
+      urls.forEach(url => {
+        const img = new Image();
+        img.src = url;
       });
-      
-      const intersectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const targetBg = bgMap.get(entry.target);
-            if (targetBg) dynamicBgDiv.style.backgroundImage = `url(${targetBg})`;
-          }
-        });
-      }, { threshold: 0.4 });
-      
-      sectionsList.forEach(sec => intersectionObserver.observe(sec));
     }
-
-    // ========== 2. جسيمات المطر والضباب والدخان الشفاف ==========
+    preloadImages(allBgUrls);
+    
+    // تعيين الخلفية الأولية (أول قسم)
+    let firstBg = sections[0]?.getAttribute('data-bg') || './ASSETS/16.png';
+    if (activeLayer) activeLayer.style.backgroundImage = `url(${firstBg})`;
+    if (inactiveLayer) inactiveLayer.style.backgroundImage = ``;
+    
+    // تبديل الخلفيات بسلاسة
+    function switchBackground(newBgUrl) {
+      if (!newBgUrl) return;
+      // تعيين الخلفية الجديدة على الطبقة غير النشطة
+      inactiveLayer.style.backgroundImage = `url(${newBgUrl})`;
+      // ننتظر إطارًا واحدًا لضمان تطبيق التغيير ثم نبدأ التلاشي
+      requestAnimationFrame(() => {
+        inactiveLayer.classList.remove('inactive');
+        inactiveLayer.classList.add('active');
+        activeLayer.classList.remove('active');
+        activeLayer.classList.add('inactive');
+        
+        // تبديل المراجع
+        let temp = activeLayer;
+        activeLayer = inactiveLayer;
+        inactiveLayer = temp;
+        
+        // بعد انتهاء التلاشي (0.9s) يمكن تنظيف الصورة القديمة اختياريًا
+        setTimeout(() => {
+          inactiveLayer.style.backgroundImage = ``; // تفريغ القديم لتوفير الذاكرة
+        }, 950);
+      });
+    }
+    
+    // مراقبة الأقسام لتغيير الخلفية عند الدخول
+    let lastBg = firstBg;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const newBg = entry.target.getAttribute('data-bg');
+          if (newBg && newBg !== lastBg) {
+            switchBackground(newBg);
+            lastBg = newBg;
+          }
+        }
+      });
+    }, { threshold: 0.35, rootMargin: "0px 0px -10px 0px" });
+    
+    sections.forEach(sec => observer.observe(sec));
+    
+    // ----- 2. تأثيرات الغلاف الجوي (مطر/ضباب/دخان شفاف) -----
     const canvas = document.getElementById('atmospheric-canvas');
     const ctx = canvas.getContext('2d');
     let width = window.innerWidth;
     let height = window.innerHeight;
     let particles = [];
+    const PARTICLE_COUNT = 150;
     
-    const PARTICLE_COUNT = 140; // عدد كافي لتأثير ناعم
-
     class AtmosphericParticle {
-      constructor() {
-        this.reset(true);
+      constructor(resetRandom = true) {
+        this.reset(resetRandom);
       }
-      
-      reset(randomizeY = true) {
-        // أنواع: 'rain' (قطرات مطر شفافة) , 'mist' (ضباب) , 'smoke' (دخان خفيف)
-        const typeRand = Math.random();
-        if (typeRand < 0.45) this.type = 'rain';
-        else if (typeRand < 0.8) this.type = 'mist';
+      reset(randomY = true) {
+        const r = Math.random();
+        if (r < 0.5) this.type = 'rain';
+        else if (r < 0.8) this.type = 'mist';
         else this.type = 'smoke';
         
         this.x = Math.random() * width;
-        this.y = randomizeY ? Math.random() * height : -20;
-        
-        // حجم صغير نسبياً
+        this.y = randomY ? Math.random() * height : -20;
         if (this.type === 'rain') {
           this.size = Math.random() * 2.5 + 0.8;
-          this.speedY = Math.random() * 1.8 + 1.2;
-          this.speedX = (Math.random() - 0.5) * 0.15;
-          this.opacity = Math.random() * 0.25 + 0.08;
-          this.color = `rgba(180, 215, 240, ${this.opacity})`;
-        } else if (this.type === 'mist') {
-          this.size = Math.random() * 40 + 25;
-          this.speedY = Math.random() * 0.35 + 0.1;
-          this.speedX = (Math.random() - 0.5) * 0.25;
-          this.opacity = Math.random() * 0.12 + 0.03;
-          this.color = `rgba(190, 215, 230, ${this.opacity})`;
-        } else { // smoke
-          this.size = Math.random() * 55 + 35;
-          this.speedY = Math.random() * 0.25 + 0.05;
+          this.speedY = Math.random() * 1.9 + 1.1;
           this.speedX = (Math.random() - 0.5) * 0.2;
+          this.opacity = Math.random() * 0.28 + 0.06;
+          this.color = `rgba(170, 215, 245, ${this.opacity})`;
+        } else if (this.type === 'mist') {
+          this.size = Math.random() * 45 + 28;
+          this.speedY = Math.random() * 0.4 + 0.1;
+          this.speedX = (Math.random() - 0.5) * 0.3;
+          this.opacity = Math.random() * 0.12 + 0.02;
+          this.color = `rgba(190, 215, 235, ${this.opacity})`;
+        } else {
+          this.size = Math.random() * 60 + 40;
+          this.speedY = Math.random() * 0.3 + 0.05;
+          this.speedX = (Math.random() - 0.5) * 0.25;
           this.opacity = Math.random() * 0.1 + 0.02;
-          this.color = `rgba(200, 210, 215, ${this.opacity})`;
+          this.color = `rgba(200, 215, 225, ${this.opacity})`;
         }
       }
-      
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
-        
-        // إعادة تدوير الجسيمات التي تخرج من الشاشة
-        if (this.y > height + 50 || this.x < -100 || this.x > width + 100) {
+        if (this.y > height + 70 || this.x < -100 || this.x > width + 100) {
           this.reset(false);
           this.y = -30;
           this.x = Math.random() * width;
         }
       }
-      
       draw() {
-        ctx.beginPath();
         if (this.type === 'rain') {
-          // رسم قطرات مطر كخطوط صغيرة مائلة لأسفل
+          ctx.beginPath();
           ctx.strokeStyle = this.color;
           ctx.lineWidth = this.size * 0.5;
           ctx.moveTo(this.x, this.y);
-          ctx.lineTo(this.x - this.speedX * 8, this.y + this.size * 2.5);
+          ctx.lineTo(this.x - this.speedX * 8, this.y + this.size * 2.8);
           ctx.stroke();
         } else {
-          // ضباب ودخان: دوائر ضبابية
+          ctx.beginPath();
           const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
           gradient.addColorStop(0, this.color);
-          gradient.addColorStop(0.8, `rgba(170, 190, 210, ${this.opacity * 0.4})`);
+          gradient.addColorStop(0.8, `rgba(160, 185, 210, ${this.opacity * 0.4})`);
           ctx.fillStyle = gradient;
           ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
           ctx.fill();
         }
       }
     }
-
+    
     function initParticles() {
       particles = [];
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
-        particles.push(new AtmosphericParticle());
-      }
+      for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new AtmosphericParticle(true));
     }
-
-    function animateParticles() {
+    
+    function animateAtmosphere() {
       ctx.clearRect(0, 0, width, height);
-      
-      // تأثير إضافي: طبقة خفيفة جداً من الضباب العام لإضفاء جو "عاصفة" ناعم
-      ctx.fillStyle = 'rgba(10, 20, 30, 0.03)';
+      ctx.fillStyle = 'rgba(8, 18, 28, 0.03)';
       ctx.fillRect(0, 0, width, height);
-      
       for (let p of particles) {
         p.update();
         p.draw();
       }
-      
-      requestAnimationFrame(animateParticles);
+      requestAnimationFrame(animateAtmosphere);
     }
-
-    function handleResize() {
+    
+    function resizeCanvas() {
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = width;
       canvas.height = height;
       initParticles();
     }
-
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    animateParticles();
-
-    // إضافة قطرات إضافية عند تحريك الماوس (بشكل خفيف جداً)
-    document.addEventListener('mousemove', (e) => {
-      // إضافة عدد قليل من القطرات حول المؤشر لتعزيز الإحساس بالعاصفة
-      for (let i = 0; i < 2; i++) {
-        if (particles.length > PARTICLE_COUNT + 30) break;
-        const p = new AtmosphericParticle();
-        p.x = e.clientX + (Math.random() - 0.5) * 70;
-        p.y = e.clientY + (Math.random() - 0.5) * 40;
-        p.type = 'rain';
-        p.size = Math.random() * 2 + 0.8;
-        p.speedY = Math.random() * 2 + 1;
-        p.speedX = (Math.random() - 0.5) * 0.3;
-        p.opacity = 0.18;
-        p.color = `rgba(170, 210, 240, ${p.opacity})`;
-        particles.push(p);
-      }
-      
-      // حذف الجسيمات الزائدة إذا تجاوزت الحد للحفاظ على الأداء
-      if (particles.length > PARTICLE_COUNT + 50) {
-        particles = particles.slice(-PARTICLE_COUNT - 20);
-      }
-    });
-
-    // وميض برق خفيف جداً (اختياري) - يضيف لمسة "عاصفة" دون إزعاج
-    let lightningTimeout;
-    function triggerLightning() {
-      if (!canvas) return;
-      // ومضة بيضاء شفافة سريعة
-      const overlay = document.createElement('div');
-      overlay.style.position = 'fixed';
-      overlay.style.top = '0';
-      overlay.style.left = '0';
-      overlay.style.width = '100%';
-      overlay.style.height = '100%';
-      overlay.style.backgroundColor = 'rgba(255, 255, 255, 0.06)';
-      overlay.style.pointerEvents = 'none';
-      overlay.style.zIndex = '10';
-      overlay.style.transition = 'opacity 0.2s';
-      document.body.appendChild(overlay);
-      
-      setTimeout(() => {
-        overlay.style.opacity = '0';
-        setTimeout(() => overlay.remove(), 300);
-      }, 50);
-      
-      // جدولة الوميض التالي بشكل عشوائي
-      lightningTimeout = setTimeout(triggerLightning, Math.random() * 15000 + 10000);
-    }
-    // بدء الوميض بعد 5 ثواني
-    setTimeout(() => triggerLightning(), 5000);
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    animateAtmosphere();
     
-    // تنظيف عند إلغاء التحميل (اختياري)
-    window.addEventListener('beforeunload', () => {
-      if (lightningTimeout) clearTimeout(lightningTimeout);
+    // تأثير عاصفة خفيف عند حركة الماوس (جسيمات إضافية)
+    document.addEventListener('mousemove', (e) => {
+      for (let i = 0; i < 2; i++) {
+        if (particles.length > PARTICLE_COUNT + 35) break;
+        const extra = new AtmosphericParticle(true);
+        extra.x = e.clientX + (Math.random() - 0.5) * 70;
+        extra.y = e.clientY + (Math.random() - 0.5) * 50;
+        extra.type = 'rain';
+        extra.size = Math.random() * 2 + 1;
+        extra.speedY = Math.random() * 2 + 1.2;
+        extra.opacity = 0.18;
+        extra.color = `rgba(190, 225, 250, ${extra.opacity})`;
+        particles.push(extra);
+      }
+      if (particles.length > PARTICLE_COUNT + 55) particles = particles.slice(-PARTICLE_COUNT - 25);
     });
-
+    
+    // وميض برق خفيف (أجواء العاصفة)
+    let lightningTimer;
+    function gentleLightning() {
+      const flash = document.createElement('div');
+      flash.style.position = 'fixed';
+      flash.style.top = '0';
+      flash.style.left = '0';
+      flash.style.width = '100%';
+      flash.style.height = '100%';
+      flash.style.backgroundColor = 'rgba(255, 245, 210, 0.045)';
+      flash.style.pointerEvents = 'none';
+      flash.style.zIndex = '10';
+      flash.style.transition = 'opacity 0.2s';
+      document.body.appendChild(flash);
+      setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 280); }, 40);
+      lightningTimer = setTimeout(gentleLightning, Math.random() * 14000 + 9000);
+    }
+    setTimeout(() => gentleLightning(), 4000);
+    window.addEventListener('beforeunload', () => { if (lightningTimer) clearTimeout(lightningTimer); });
+    
   })();
 </script>
 </body>
