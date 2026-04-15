@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>ميرسك في عين العاصفة | تحليل جيوسياسي + SWOT</title>
-  <!-- Fonts & Icons -->
+  <title>ميرسك  | تحليل جيوسياسي </title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -35,7 +34,6 @@
       scroll-behavior: smooth;
     }
 
-    /* ----- طبقات الخلفية المتقاطعة (Crossfade Layers) ----- */
     .bg-container {
       position: fixed;
       top: 0;
@@ -68,7 +66,6 @@
       z-index: 0;
     }
 
-    /* Canvas atmospheric effect (فوق الخلفية) */
     #atmospheric-canvas {
       position: fixed;
       top: 0;
@@ -80,7 +77,6 @@
       opacity: 0.85;
     }
 
-    /* ========= NAVIGATION - متجاوبة بدون التفاف ========= */
     .nav-glass {
       position: fixed;
       top: 0;
@@ -123,7 +119,6 @@
       flex-shrink: 0;
     }
 
-    /* container & sections */
     .presentation-container {
       position: relative;
       z-index: 5;
@@ -221,10 +216,9 @@
       }
     }
 
-    /* كروت شفافة */
     .slide-card, .ref-card, .presenters-card, .hero-content, .swot-card {
       background: var(--glass-bg);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(2px);
       border: 1px solid var(--glass-border);
       border-radius: 42px;
       padding: 28px 40px;
@@ -268,7 +262,6 @@
       object-fit: cover;
     }
 
-    /* typography */
     .section-title {
       font-size: clamp(1.3rem, 5vw, 1.9rem);
       font-weight: 800;
@@ -347,7 +340,7 @@
     }
     .swot-item {
       background: rgba(0, 0, 0, 0.55);
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(2px);
       border-radius: 32px;
       padding: 22px 20px;
       transition: all 0.2s ease;
@@ -447,7 +440,7 @@
 
     .ref-card, .presenters-card {
       background: var(--glass-bg);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(2px);
       border: 1px solid var(--glass-border);
       border-radius: 42px;
       padding: 38px 32px;
@@ -567,7 +560,7 @@
 
     .hero-content {
       background: rgba(8, 28, 48, 0.55);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(2px);
       text-align: center;
       padding: 32px 28px;
     }
